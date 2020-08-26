@@ -6,7 +6,10 @@ const connection = require("../db/mysql_connection");
 // @request ""
 // @response success, rows[movie_id, title, release_date, poster_path]
 exports.getMovies = async (req, res, next) => {
-  let query = `select movie_id, title, release_date, poster_path from MP_movie`;
+  let offset = req.query.offset;
+  let limit = req.query.limit;
+
+  let query = `select movie_id, title, release_date, poster_path from MP_movie limit ${offset}, ${limit}`;
   try {
     [rows] = await connection.query(query);
     res.status(200).json({ success: true, rows });
