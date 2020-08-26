@@ -26,7 +26,7 @@ const auth = async (req, res, next) => {
   }
 
   //위의 유저 아이디로 DB에서 TOKEN 정보를 가져온다
-  let query = `select * from sns_token where user_id = ${user_id}`;
+  let query = `select * from MP_token where user_id = ${user_id}`;
   try {
     [rows] = await connection.query(query);
     console.log(rows);
@@ -44,7 +44,7 @@ const auth = async (req, res, next) => {
   }
   // 유효한 토큰이 맞으니까 유저 정보를 db에서 가져옵니다
   if (isCorrect) {
-    query = `select * from sns_user where id = ${user_id}`;
+    query = `select * from MP_user where id = ${user_id}`;
     try {
       [rows] = await connection.query(query);
       // 유저 정보를 req에 셋팅해서 next() 한다
