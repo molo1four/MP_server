@@ -31,13 +31,13 @@ exports.AddLikes = async (req, res, next) => {
   let query = `insert into MP_user_likes(user_id,movie_id) values (${user_id},${video_id})`;
   try {
     [rows] = await connection.query(query);
-    if (user_id == null || movie_id == null) {
-      res.status(401).json({
-        success: false,
-        message: "유저 아이디 혹은 영화 아이디가 올바르지 않습니다.",
-      });
-      return;
-    }
+    //  if (user_id == null || movie_id == null) {
+    //     res.status(401).json({
+    //       success: false,
+    //       message: "유저 아이디 혹은 영화 아이디가 올바르지 않습니다.",
+    //     });
+    //     return;
+    //   }
     res.status(200).json({ success: true, rows });
   } catch (e) {
     res.status(500).json({ success: false, error: e });
