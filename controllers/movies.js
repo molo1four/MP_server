@@ -2,7 +2,7 @@
 const connection = require("../db/mysql_connection");
 
 // @desc    영화 데이터 불러오기
-// @route   GET /api/v1/movies
+// @route   GET /api/v1/movies?offset=0&limit=25
 // @request ""
 // @response success, rows[movie_id, title, release_date, poster_path]
 exports.getMovies = async (req, res, next) => {
@@ -32,12 +32,10 @@ exports.AddLikes = async (req, res, next) => {
   try {
     [rows] = await connection.query(query);
     if (user_id == null || movie_id == null) {
-      res
-        .status(401)
-        .json({
-          success: false,
-          message: "유저 아이디 혹은 영화 아이디가 올바르지 않습니다.",
-        });
+      res.status(401).json({
+        success: false,
+        message: "유저 아이디 혹은 영화 아이디가 올바르지 않습니다.",
+      });
       return;
     }
     res.status(200).json({ success: true, rows });
