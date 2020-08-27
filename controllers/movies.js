@@ -43,3 +43,28 @@ exports.AddLikes = async (req, res, next) => {
     res.status(500).json({ success: false, error: e });
   }
 };
+
+// @desc    평가하지 않은 영화목록 불러오기
+// @route   GET /api/v1/movies/doLikes?offset=0&limit=25
+// @request ""
+// @response success, rows[movie_id, title, release_date, poster_path]
+exports.getMovies_nl = async (req, res, next) => {
+  let offset = req.query.offset;
+  let limit = req.query.limit;
+
+  let query = `SELECT M.movie_id, M.title, M.release_date, M.poster_path
+	FROM MP_movie AS M
+	LEFT JOIN MP_user_likes AS UL
+	ON UL.movie_id = M.movie_id AND UL.user_id = ${user_id}
+  WHERE UL.id IS NULL
+  limit ${offset}, ${limit}`;
+
+  try {
+    [rows] = await connection.query(query);
+    res.status(200).json({ success: true, rows });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ success: false, error: e });
+    return;
+  }
+};
