@@ -45,10 +45,11 @@ exports.AddLikes = async (req, res, next) => {
 };
 
 // @desc    평가하지 않은 영화목록 불러오기
-// @route   GET /api/v1/movies/doLikes?offset=0&limit=25
+// @route   GET /api/v1/movies/doLikes:user_id?offset=0&limit=25
 // @request ""
 // @response success, rows[movie_id, title, release_date, poster_path]
 exports.getMovies_nl = async (req, res, next) => {
+  let user_id = req.params.user_id;
   let offset = req.query.offset;
   let limit = req.query.limit;
 
