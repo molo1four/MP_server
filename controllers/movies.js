@@ -49,7 +49,7 @@ exports.AddLikes = async (req, res, next) => {
 // @request ""
 // @response success, rows[movie_id, title, release_date, poster_path]
 exports.getMovies_nl = async (req, res, next) => {
-  let user_id = req.query.user_id;
+  let user_id = req.user.id;
   let offset = req.query.offset;
   let limit = req.query.limit;
 
