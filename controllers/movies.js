@@ -28,7 +28,7 @@ exports.AddLikes = async (req, res, next) => {
   let user_id = req.body.user_id;
   let movie_id = req.body.movie_id;
 
-  let query = `insert into MP_user_likes(user_id,movie_id) values (${user_id},${video_id})`;
+  let query = `insert into MP_user_likes(user_id,movie_id) values (${user_id},${movie_id})`;
   try {
     [rows] = await connection.query(query);
     //  if (user_id == null || movie_id == null) {
