@@ -19,3 +19,29 @@ exports.getMovies = async (req, res, next) => {
     return;
   }
 };
+
+// @desc    선호 영화 입력하기
+// @route   POST /api/v1/movies
+// @request [body] user_id, movie_id
+// @response success
+exports.AddLikes = async (req, res, next) => {
+  let user_id = req.body.user_id;
+  let movie_id = req.body.movie_id;
+
+  let query = `insert into MP_user_likes(user_id,movie_id) values (${user_id},${video_id})`;
+  try {
+    [rows] = await connection.query(query);
+    if (user_id == null || movie_id == null) {
+      res
+        .status(401)
+        .json({
+          success: false,
+          message: "유저 아이디 혹은 영화 아이디가 올바르지 않습니다.",
+        });
+      return;
+    }
+    res.status(200).json({ success: true, rows });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e });
+  }
+};
