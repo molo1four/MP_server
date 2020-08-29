@@ -12,7 +12,7 @@ exports.getMovies = async (req, res, next) => {
   let query = `select movie_id, title, release_date, poster_path from MP_movie limit ${offset}, ${limit}`;
   try {
     [rows] = await connection.query(query);
-    res.status(200).json({ success: true, rows });
+    res.status(200).json({ success: true, cnt: rows.length, rows });
   } catch (e) {
     console.log(e);
     res.status(500).json({ success: false, error: e });
