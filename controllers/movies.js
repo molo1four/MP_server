@@ -59,7 +59,7 @@ exports.getMovies_nl = async (req, res, next) => {
 
   try {
     [rows] = await connection.query(query);
-    res.status(200).json({ success: true, rows });
+    res.status(200).json({ success: true, cnt: rows.length, rows });
   } catch (e) {
     console.log(e);
     res.status(500).json({ success: false, error: e });
