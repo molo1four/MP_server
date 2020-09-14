@@ -29,6 +29,7 @@
     "moment": "^2.27.0",
     "morgan": "^1.10.0",
     "mysql2": "^2.1.0",
+    "node-apriori": "^1.0.0",
     "path": "^0.12.7",
     "validator": "^13.1.1"
   }
