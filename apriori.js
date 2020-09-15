@@ -1,8 +1,6 @@
 // db 연결
 var apriori = require("node-apriori");
 
-const connection = require("./db/mysql_connection");
-
 // 알고리즘 계산 프로세스
 var transactions = [
   [119, 125, 126, 134, 139],
@@ -60,12 +58,12 @@ apriori.on("data", async function (itemset) {
   if (items.length == 1) {
     let query = `insert into MP_recom (recom_movie_id) values (${items.join()})`;
     console.log(query);
-    try {
-      await connection.query(query);
-    } catch (e) {
-      console.log(e);
-      return;
-    }
+    // try {
+    //   await connection.query(query);
+    // } catch (e) {
+    //   console.log(e);
+    //   return;
+    // }
   } else if (items.length > 1) {
     for (let i = 0; i < items.length; i++) {
       for (let j = 0; j < items.length; j++) {
@@ -73,12 +71,12 @@ apriori.on("data", async function (itemset) {
           let query = `insert into MP_recom_AR (AR_movie_id1, AR_movie_id2) values (${items[i]},${items[j]})`;
 
           console.log(query);
-          try {
-            await connection.query(query);
-          } catch (e) {
-            console.log(e);
-            return;
-          }
+          // try {
+          //   await connection.query(query);
+          // } catch (e) {
+          //   console.log(e);
+          //   return;
+          // }
         }
       }
     }
