@@ -8,6 +8,8 @@
 // one이랑 ${user_id}랑 비교해서 중복제거
 // [최종결과값...] < 얘들로 rows를 만들어서 android에 구현
 
+// db 연결
+const connection = require("./db/mysql_connection");
 var apriori = require("node-apriori");
 
 // 알고리즘 계산 프로세스
@@ -49,7 +51,7 @@ var transactions = [
   ],
 ];
 
-// * 위 값을 쿼리문 결과값으로 대체?
+// * == 위 값을 쿼리문 결과값으로 대체?
 // select
 //     CONCAT("[", GROUP_CONCAT(movie_id SEPARATOR ','),"]",",") as MovieName
 // from MP_user_likes
@@ -60,35 +62,43 @@ var apriori = new apriori.Apriori(0.4);
 console.log(`Executing Apriori...`);
 
 // Returns itemsets 'as soon as possible' through events.
-apriori.on("data", function (itemset) {
+apriori.on("data", async function (itemset) {
   // Do something with the frequent itemset.
   var support = itemset.support;
   var items = itemset.items;
 
-  const arraylist = Array();
-  let cnt = 0;
-  var amu = items.join(",");
-  var split = amu.split(",");
-  var i = 0;
-  arraylist[cnt] = new Array(cnt);
+  if (items.length == 1) {
+    let query = `insert into MP_recom (recom_movie_id) values (${items.join()})`;
+    console.log(query);
+    try {
+      connection.query(query);
+    } catch (e) {
+      console.log(e);
+      return;
+    }
+  } else if (items.length > 1) {
+    for (let i = 0; i < items.length; i++) {
+      for (let j = 0; j < items.length; j++) {
+        if (items[i] != items[j]) {
+          let query = `insert into MP_recom_AR (movie_id1, movie_id2) values (${items[i]},${items[j]})`;
 
-  for (i in split) {
-    arraylist[cnt].push(split[i]);
+          console.log(query);
+          try {
+            connection.query(query);
+          } catch (e) {
+            console.log(e);
+            return;
+          }
+        }
+      }
+    }
   }
 
-  cnt = cnt + 1;
-
-  // var filtered = arraylist.filter(function (el) {
-  //   return el != null;
-  // });
-  arraylist.push(items.join());
-  // console.log(arraylist);
-  // console.log(items.join());
-  console.log(
-    `Itemset { ${items.join(
-      ","
-    )} } is frequent and have a support of ${support}`
-  );
+  // console.log(
+  //   `Itemset { ${items.join(
+  //     ","
+  //   )} } is frequent and have a support of ${support}`
+  // );
 });
 
 // Execute Apriori on a given set of transactions.
