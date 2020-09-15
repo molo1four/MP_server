@@ -1,19 +1,9 @@
-// 1번 유저의 목록 ${user_id}= [119, 125, 126, 134, 139]
-// 도출된 계산값 = [119,120,122,123,125,126,129,136,137,139,//[120,122],[122,136],[123,129],[126,139]]
-// array.legnth 혹은 array.size >= 2 면 second 어레이에 저장, array.size = 1 이면 one 어레이에 저장 (jsonobject = {one,second} )
-// 계산값을 제이슨으로 바꾸면
-//                jsonobject = {one : [120,122,123,126,129,136,137,139] , second :[[120,122],[122,136],[123,129],[126,139]] }
-//
-// 유저랑 비교 후 중복여부에 따라 one에 추가 [119, 125, 126, 134, 139]  // second :[[120,122],[122,136],[123,129],[126,139]]
-// one이랑 ${user_id}랑 비교해서 중복제거
-// [최종결과값...] < 얘들로 rows를 만들어서 android에 구현
-
 // db 연결
-const connection = require("./db/mysql_connection");
 var apriori = require("node-apriori");
 
-// 알고리즘 계산 프로세스
+const connection = require("./db/mysql_connection");
 
+// 알고리즘 계산 프로세스
 var transactions = [
   [119, 125, 126, 134, 139],
   [119, 121, 123, 126, 127, 129, 139, 143],
@@ -71,7 +61,7 @@ apriori.on("data", async function (itemset) {
     let query = `insert into MP_recom (recom_movie_id) values (${items.join()})`;
     console.log(query);
     try {
-      connection.query(query);
+      await connection.query(query);
     } catch (e) {
       console.log(e);
       return;
@@ -80,11 +70,11 @@ apriori.on("data", async function (itemset) {
     for (let i = 0; i < items.length; i++) {
       for (let j = 0; j < items.length; j++) {
         if (items[i] != items[j]) {
-          let query = `insert into MP_recom_AR (movie_id1, movie_id2) values (${items[i]},${items[j]})`;
+          let query = `insert into MP_recom_AR (AR_movie_id1, AR_movie_id2) values (${items[i]},${items[j]})`;
 
           console.log(query);
           try {
-            connection.query(query);
+            await connection.query(query);
           } catch (e) {
             console.log(e);
             return;
@@ -101,7 +91,7 @@ apriori.on("data", async function (itemset) {
   // );
 });
 
-// Execute Apriori on a given set of transactions.
+//  Execute Apriori on a given set of transactions.
 apriori.exec(transactions).then(function (result) {
   // Returns both the collection of frequent itemsets and execution time in millisecond.
   var frequentItemsets = result.itemsets;
