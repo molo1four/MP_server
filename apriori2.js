@@ -1,8 +1,8 @@
+// db 연결
+const connection = require("./db/mysql_connection");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config/config.env" });
 var apriori = require("node-apriori");
-const connection = require("./db/mysql_connection");
-
 // 알고리즘 계산 프로세스
 
 array_recom = new Array();
@@ -95,11 +95,9 @@ apriori.exec(transactions).then(function (result) {
   );
 });
 
-// console.log(array_recom);
-
 let db_insert = async () => {
   for (let i = 0; i < array_recom.length; i++) {
-    let query = array_recom[i];
+    let query = `insert into MP_recom (recom_movie_id) values (${array_recom[i]})`;
     console.log(query);
     try {
       [rows] = await connection.query(query);
@@ -111,7 +109,7 @@ let db_insert = async () => {
   }
 
   for (let j = 0; j < array_recom_AR.length; j++) {
-    let query = array_recom_AR[j];
+    let query = `insert into MP_recom (recom_movie_id) values (${array_recom_AR[j]})`;
     console.log(query);
     try {
       [rows] = await connection.query(query);
