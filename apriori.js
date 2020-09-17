@@ -45,12 +45,6 @@ var transactions = [
   ],
 ];
 
-// * == 위 값을 쿼리문 결과값으로 대체?
-// select
-//     CONCAT("[", GROUP_CONCAT(movie_id SEPARATOR ','),"]",",") as MovieName
-// from MP_user_likes
-// group by user_id;
-
 // Execute Apriori with a minimum support of 40%.
 var apriori = new apriori.Apriori(0.4);
 console.log(`Executing Apriori...`);
@@ -78,11 +72,11 @@ apriori.on("data", function (itemset) {
     }
   }
 
-  // console.log(
-  //   `Itemset { ${items.join(
-  //     ","
-  //   )} } is frequent and have a support of ${support}`
-  // );
+  console.log(
+    `Itemset { ${items.join(
+      ","
+    )} } is frequent and have a support of ${support}`
+  );
 });
 
 //  Execute Apriori on a given set of transactions.
