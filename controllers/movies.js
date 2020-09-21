@@ -66,3 +66,37 @@ exports.getMovies_nl = async (req, res, next) => {
     return;
   }
 };
+
+// @desc    알고리즘 도출값과 유저의 [좋아요]영화 목록 비교해서 추천 (1)
+// @route   GET /api/v1/movies/getRecom:user_id?offset=0&limit=25
+// @request ""
+// @response success, rows[]
+exports.getRecom = async (req, res, next) => {
+  let user_id = req.user.id;
+  let offset = req.query.offset;
+  let limit = req.query.limit;
+
+  // 유저가 이미 좋아요한 영화을 제외한, 추천영화목록을 가져오는 쿼리
+  let query = `
+  select re.recom_movie_id
+    from MP_user_likes as ul
+      right outer join MP_recom as re 
+      on ul.movie_id = re.recom_movie_id and ul.user_id = ${user_id}
+      where ul.movie_id is null
+      limit ${offset}, ${limit};`;
+
+  const conn = await connection.getConnection();
+  await conn.beginTransaction();
+
+  try {
+    [rows] = await connection.query(query);
+    res.status(200).json({ success: true, cnt: rows.length, rows });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ success: false, error: e });
+    return;
+  }
+};
+
+// 연관 추천목록
+`select recom_movie_id2 from MP_recom_AR as a join MP_user_like as b on a.recom_movie_id1 = b.movie_id `;
