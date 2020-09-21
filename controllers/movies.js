@@ -67,10 +67,10 @@ exports.getMovies_nl = async (req, res, next) => {
   }
 };
 
-// @desc    알고리즘 도출값과 유저의 [좋아요]영화 목록 비교해서 추천 (1)
+// @desc    알고리즘 도출값과 유저의 [좋아요]영화 목록 비교해서 일반추천
 // @route   GET /api/v1/movies/getRecom:user_id?offset=0&limit=25
 // @request ""
-// @response success, rows[]
+// @response success,cnt, rows[]
 exports.getRecom = async (req, res, next) => {
   let user_id = req.user.id;
   let offset = req.query.offset;
@@ -85,9 +85,6 @@ exports.getRecom = async (req, res, next) => {
       where ul.movie_id is null
       limit ${offset}, ${limit};`;
 
-  const conn = await connection.getConnection();
-  await conn.beginTransaction();
-
   try {
     [rows] = await connection.query(query);
     res.status(200).json({ success: true, cnt: rows.length, rows });
@@ -98,5 +95,15 @@ exports.getRecom = async (req, res, next) => {
   }
 };
 
-// 연관 추천목록
-`select recom_movie_id2 from MP_recom_AR as a join MP_user_like as b on a.recom_movie_id1 = b.movie_id `;
+// @desc    알고리즘 도출값과 유저의 [좋아요]영화 목록 비교해서 일반추천
+// @route   GET /api/v1/movies/getRecom:user_id?offset=0&limit=25
+// @request ""
+// @response success,cnt, rows[]
+exports.getRecom_AR = async (req, res, next) => {
+  let user_id = req.user.id;
+  let offset = req.query.offset;
+  let limit = req.query.limit;
+
+  // 연관 추천목록
+  let query = `select recom_movie_id2 from MP_recom_AR as a join MP_user_like as b on a.recom_movie_id1 = b.movie_id `;
+};
