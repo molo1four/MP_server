@@ -135,7 +135,7 @@ function first() {
   function algorism() {
     console.log("** function a() 시작 **");
     // Execute Apriori with a minimum support of 40%.
-    var apriori = new apriori1.Apriori(0.4);
+    var apriori = new apriori1.Apriori(0.3);
     console.log(`Executing Apriori...`);
 
     // Returns itemsets 'as soon as possible' through events.
@@ -146,14 +146,14 @@ function first() {
       var items = itemset.items;
 
       if (items.length == 1) {
-        let query = `insert into MP_recom (recom_movie_id) values (${items.join()})`;
+        let query = `insert into MP_recom (recom_movie_id,support) values (${items.join()},${support})`;
         console.log("insert 쿼리문 제작 : " + query);
         array_recom.push(query);
       } else if (items.length > 1) {
         for (let i = 0; i < items.length; i++) {
           for (let j = 0; j < items.length; j++) {
             if (items[i] != items[j]) {
-              let query = `insert into MP_recom_AR (AR_movie_id1, AR_movie_id2) values (${items[i]},${items[j]})`;
+              let query = `insert into MP_recom_AR (AR_movie_id1, AR_movie_id2,support) values (${items[i]},${items[j]},${support})`;
 
               console.log("insert 쿼리문2 제작 : " + query);
               array_recom_AR.push(query);

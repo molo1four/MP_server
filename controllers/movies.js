@@ -76,13 +76,14 @@ exports.getRecom = async (req, res, next) => {
   let offset = req.query.offset;
   let limit = req.query.limit;
 
-  // 유저가 이미 좋아요한 영화을 제외한, 일반추천영화목록을 가져오는 쿼리
+  // 유저가 이미 좋아요한 영화을 제외한, 일반추천영화목록을 지지도 순으로 가져오는 쿼리
   let query = `
   select re.recom_movie_id
     from MP_user_likes as ul
       right outer join MP_recom as re 
       on ul.movie_id = re.recom_movie_id and ul.user_id = ${user_id}
       where ul.movie_id is null
+      order by re.support desc
       limit ${offset}, ${limit};`;
 
   try {
@@ -104,13 +105,14 @@ exports.getRecom_AR = async (req, res, next) => {
   let offset = req.query.offset;
   let limit = req.query.limit;
 
-  // 유저가 이미 좋아요한 영화을 제외한, 연관추천영화목록을 가져오는 쿼리
+  // 유저가 이미 좋아요한 영화을 제외한, 연관추천영화목록을 지지도 순으로 가져오는 쿼리
   let query = `Select distinct(b.AR_movie_id2) as movie_id
   From MP_user_likes as a
   Join MP_recom_AR as b
   On b.AR_movie_id1 = a.movie_id and a.user_id  = ${user_id}
   Where b.AR_movie_id2 not in(
   Select distinct movie_id from MP_user_likes where user_id = ${user_id})
+  order by b.support desc
   limit ${offset},${limit};`;
 
   try {
