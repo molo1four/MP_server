@@ -45,7 +45,7 @@ exports.AddLikes = async (req, res, next) => {
 // @route   GET /api/v1/movies/doLikes:user_id?offset=0&limit=25
 // @request ""
 // @response success, rows[movie_id, title, release_date, poster_path]
-exports.getMovies_nl = async (req, res, next) => {
+exports.getMovies_ny = async (req, res, next) => {
   let user_id = req.user.id;
   let offset = req.query.offset;
   let limit = req.query.limit;
