@@ -1,3 +1,4 @@
+const { off } = require("../db/mysql_connection");
 // db 연결
 const connection = require("../db/mysql_connection");
 
@@ -78,13 +79,14 @@ exports.getRecom = async (req, res, next) => {
 
   // 유저가 이미 좋아요한 영화을 제외한, 일반추천영화목록을 지지도 순으로 가져오는 쿼리
   let query = `
-  select re.recom_movie_id
-    from MP_user_likes as ul
-      right outer join MP_recom as re 
-      on ul.movie_id = re.recom_movie_id and ul.user_id = ${user_id}
-      where ul.movie_id is null
-      order by re.support desc
-      limit ${offset}, ${limit};`;
+  select re.recom_movie_id as movie_id,m.title, m.release_date, m.poster_path
+  from MP_movie as m
+  right join MP_recom as re
+  on m.movie_id = re.recom_movie_id
+  where re.recom_movie_id not in(
+  select movie_id from MP_user_likes where user_id = ${user_id})
+  order by re.support desc
+  limit ${offset},${limit};`;
 
   try {
     [rows] = await connection.query(query);
