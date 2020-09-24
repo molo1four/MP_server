@@ -45,7 +45,7 @@ exports.AddLikes = async (req, res, next) => {
 // @desc    평가하지 않은 영화목록 불러오기
 // @route   GET /api/v1/movies/doLikes:user_id?offset=0&limit=25
 // @request ""
-// @response success, rows[movie_id, title, release_date, poster_path]
+// @response success, cnt, rows[movie_id, title, release_date, poster_path]
 exports.getMovies_ny = async (req, res, next) => {
   let user_id = req.user.id;
   let offset = req.query.offset;
@@ -68,10 +68,35 @@ exports.getMovies_ny = async (req, res, next) => {
   }
 };
 
+// @desc    내가 평가한 영화 불러오기
+// @route   GET /api/v1/movies/getLiked:user_id?offset=0&limit=25
+// @request ""
+// @response success, rows[movie_id, title, release_date, poster_path]
+exports.getLiked = async (req, res, next) => {
+  let user_id = req.user.id;
+  let offset = req.query.offset;
+  let limit = req.query.limit;
+
+  let query = `select m.movie_id, m.title, m.release_date, m.poster_path
+  from MP_user_likes as ul 
+  join MP_movie as m 
+  on ul.movie_id = m.movie_id and user_id = ${user_id}
+  limit ${offset},${limit};`;
+
+  try {
+    [rows] = await connection.query(query);
+    res.status(200).json({ success: true, cnt: rows.length, rows });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ success: false, error: e });
+    return;
+  }
+};
+
 // @desc    알고리즘 도출값과 유저의 [좋아요]영화 목록 비교해서 일반추천
 // @route   GET /api/v1/movies/getRecom:user_id?offset=0&limit=25
 // @request ""
-// @response success,cnt, rows[]
+// @response success, cnt, rows[movie_id, title, release_date, poster_pat
 exports.getRecom = async (req, res, next) => {
   let user_id = req.user.id;
   let offset = req.query.offset;
@@ -101,7 +126,7 @@ exports.getRecom = async (req, res, next) => {
 // @desc    알고리즘 도출값과 유저의 [좋아요]영화 목록 비교해서 연관추천
 // @route   GET /api/v1/movies/getRecom_AR:user_id?offset=0&limit=25
 // @request ""
-// @response success,cnt, rows[]
+// @response success, cnt, rows[movie_id, title, release_date, poster_pat
 exports.getRecom_AR = async (req, res, next) => {
   let user_id = req.user.id;
   let offset = req.query.offset;
