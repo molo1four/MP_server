@@ -134,8 +134,8 @@ function first() {
 
   function algorism() {
     console.log("** function a() 시작 **");
-    // Execute Apriori with a minimum support of 40%.
-    var apriori = new apriori1.Apriori(0.3);
+    // Execute Apriori with a minimum support of 50%. // 지지도 설정
+    var apriori = new apriori1.Apriori(0.4);
     console.log(`Executing Apriori...`);
 
     // Returns itemsets 'as soon as possible' through events.
@@ -212,4 +212,4 @@ let db_insert = async () => {
   }
   connection.end();
 };
-setTimeout(db_insert, 10000);
+setTimeout(db_insert, 50000);
