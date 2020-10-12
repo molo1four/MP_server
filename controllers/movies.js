@@ -126,7 +126,7 @@ exports.getRecom = async (req, res, next) => {
 // @desc    알고리즘 도출값과 유저의 [좋아요]영화 목록 비교해서 연관추천
 // @route   GET /api/v1/movies/getRecom_AR:user_id?offset=0&limit=25
 // @request ""
-// @response success, cnt, rows[movie_id, title, release_date, poster_pat
+// @response success, cnt, rows[movie_id, title, release_date, poster_path
 exports.getRecom_AR = async (req, res, next) => {
   let user_id = req.user.id;
   let offset = req.query.offset;
@@ -152,4 +152,17 @@ exports.getRecom_AR = async (req, res, next) => {
     res.status(500).json({ success: false, error: e });
     return;
   }
+};
+
+// @desc    알고리즘 도출값과 유저의 [좋아요]영화 목록 비교해서 연관추천
+// @route   GET /api/v1/movies/searchMovie:user_id?keyword=txtSearch&offset=0&limit=25
+// @request ""
+// @response success, cnt, rows[movie_id, title, release_date, poster_path,
+exports.searchMovie = async (req, res, next) => {
+  let user_id = req.user.id;
+  let keyword = req.query.keyword;
+  let offset = req.query.offset;
+  let limit = req.query.limit;
+
+  let query = ``;
 };
