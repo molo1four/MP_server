@@ -8,6 +8,7 @@ const {
   getRecom_AR,
   getMovies_ny,
   getLiked,
+  searchMovie,
 } = require("../controllers/movies");
 const { route } = require("./users");
 
@@ -19,4 +20,5 @@ router.route("/getLiked").get(auth, getLiked);
 router.route("/getMovies_ny").get(auth, getMovies_ny);
 router.route("/getRecom").get(auth, getRecom);
 router.route("/getRecom_AR").get(auth, getRecom_AR);
+router.route("/searchMovies").get(auth, searchMovie)
 module.exports = router;

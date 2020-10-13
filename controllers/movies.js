@@ -154,15 +154,69 @@ exports.getRecom_AR = async (req, res, next) => {
   }
 };
 
-// @desc    알고리즘 도출값과 유저의 [좋아요]영화 목록 비교해서 연관추천
+// @desc    키워드 검색
 // @route   GET /api/v1/movies/searchMovie:user_id?keyword=txtSearch&offset=0&limit=25
 // @request ""
 // @response success, cnt, rows[movie_id, title, release_date, poster_path,
 exports.searchMovie = async (req, res, next) => {
-  let user_id = req.user.id;
+  // let user_id = req.user.id;
   let keyword = req.query.keyword;
+  let conv_keyword ;
   let offset = req.query.offset;
   let limit = req.query.limit;
 
-  let query = ``;
+
+  if(keyword == "모험"){
+    conv_keyword = 12;
+  }else if (keyword == "판타지"){
+    conv_keyword = 14;
+  }else if (keyword == "애니메이션"){
+    conv_keyword = 16;
+  }else if (keyword == "드라마"){
+    conv_keyword = 18;
+  }else if (keyword == "공포"){
+    conv_keyword = 27;
+  }else if (keyword == "액션"){
+    conv_keyword = 28;
+  }else if (keyword == "역사"){
+    conv_keyword = 36;
+  }else if (keyword == "서부"){
+    conv_keyword = 37;
+  }else if (keyword == "스릴러"){
+    conv_keyword = 53;
+  }else if (keyword == "범죄"){
+    conv_keyword = 80;
+  }else if (keyword == "다큐멘터리"){
+    conv_keyword = 99;
+  }else if (keyword == "SF"){
+    conv_keyword = 878;
+  }else if (keyword == "미스터리"){
+    conv_keyword = 9648;
+  }else if (keyword == "음악"){
+    conv_keyword = 10402;
+  }else if (keyword == "로맨스"){
+    conv_keyword = 10749;
+  }else if (keyword == "가족"){
+    conv_keyword = 10751;
+  }else if (keyword == "전쟁"){
+    conv_keyword = 10752;
+  }else if (keyword == "TV영화"){
+    conv_keyword = 10770;
+  }
+  let query = `select distinct(m.movie_id),m.title, m.release_date, m.backdrop_path, m.poster_path, m.overview
+  from MP_movie as m
+  join MP_movie_genre as mg
+  on m.movie_id = mg.movie_id
+  where mg.genre_id = ${conv_keyword} or  
+  m.title like "%${keyword}%"
+  limit ${offset},${limit};`;
+
+  try {
+    [rows] = await connection.query(query);
+    res.status(200).json({ success: true, cnt: rows.length, rows });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ success: false, error: e });
+    return;
+  }
 };
