@@ -161,7 +161,7 @@ exports.getRecom_AR = async (req, res, next) => {
 exports.searchMovie = async (req, res, next) => {
   // let user_id = req.user.id;
   let keyword = req.query.keyword;
-  let conv_keyword ;
+  let conv_keyword = null;
   let offset = req.query.offset;
   let limit = req.query.limit;
 
@@ -210,6 +210,7 @@ exports.searchMovie = async (req, res, next) => {
   where mg.genre_id = ${conv_keyword} or  
   m.title like "%${keyword}%"
   limit ${offset},${limit};`;
+  console.log(query)
 
   try {
     [rows] = await connection.query(query);
