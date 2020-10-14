@@ -128,9 +128,11 @@ exports.withdrawal = async(req,res,next) =>{
 
   try {
     [result] = await conn.query(query);
+    res.status(200).json({ success: true, error: "good" });
     console.log("1");
     
   } catch (e) {
+    res.status(500).json({ success: false, error: e });
     await conn.rollback();
     return;
   }
@@ -138,11 +140,16 @@ exports.withdrawal = async(req,res,next) =>{
   query = `delete from MP_user where id = ${user_id}`
   console.log("2");
   try {
-    [result] = await connection.query(query);
+    console.log("22");
+    [result] = await conn.query(query);
+    console.log("33");
     await conn.commit();
+    res.status(201).json({ success: true, error: "good" });
     console.log("3");
   } catch (e) {
+    res.status(500).json({ success: false, error: e });
     await conn.rollback();
+  
     console.log(e);
     return;
   } finally {
