@@ -11,7 +11,6 @@ const {
   searchMovie,
   likesReset,
 } = require("../controllers/movies");
-const { route } = require("./users");
 
 const router = express.Router();
 
