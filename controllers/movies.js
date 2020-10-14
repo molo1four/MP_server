@@ -1,4 +1,4 @@
-const { off } = require("../db/mysql_connection");
+const { off, query } = require("../db/mysql_connection");
 // db 연결
 const connection = require("../db/mysql_connection");
 
@@ -221,3 +221,22 @@ exports.searchMovie = async (req, res, next) => {
     return;
   }
 };
+
+
+exports.likesReset = async (req,res,next) =>{
+  let user_id = req.user.id;
+
+  let query = `delete from MP_user_likes where user_id = ${user_id}`
+
+  try {
+    [result] = await connection.query(query);
+    if (result.affectedRows == 1) {
+      res.status(200).json({ success: true, result: result });
+      return;
+    } else {
+      res.status(400).json({ success: false });
+    }
+  } catch (e) {
+    res.status(500).json({ success: false, error: e });
+  }
+}

@@ -3,7 +3,6 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const { query } = require("../db/mysql_connection");
 
 // @desc    회원가입
 // @route   POST /api/v1/users
@@ -117,3 +116,36 @@ exports.logout = async (req, res, next) => {
     res.status(500).json({ success: false, error: e });
   }
 };
+
+exports.withdrawal = async(req,res,next) =>{
+  let token = req.user.token;
+  let user_id = req.user.id;
+
+  let query = `delete from MP_token where user_id = ${user_id} and token = "${token}"`
+
+  const conn = await connection.getConnection();
+  await conn.beginTransaction();
+
+  try {
+    [result] = await conn.query(query);
+    await conn.commit();
+  } catch (e) {
+    await conn.rollback();
+    return;
+  } finally {
+    conn.release(); // pool에 connection 반납
+  }
+
+  query = `delete from MP_user where user_id = ${user_id}`
+
+  try {
+    [rows] = await connection.query(query);
+    console.log(rows);
+  } catch (e) {
+    console.log(e);
+    return;
+  }
+  connection.end();
+}
+
+
