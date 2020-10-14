@@ -144,8 +144,9 @@ exports.withdrawal = async(req,res,next) =>{
   } catch (e) {
     console.log(e);
     return;
+  } finally {
+    conn.release(); // pool에 connection 반납
   }
-  connection.end();
 }
 
 
