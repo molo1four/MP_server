@@ -121,7 +121,7 @@ exports.withdrawal = async(req,res,next) =>{
   let token = req.user.token;
   let user_id = req.user.id;
 
-  let query = `delete from MP_token where user_id = ${user_id} and token = "${token}"`
+  let query = `delete from MP_token where user_id = ${user_id}`
 
   const conn = await connection.getConnection();
   await conn.beginTransaction();
