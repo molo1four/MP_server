@@ -128,7 +128,7 @@ exports.withdrawal = async(req,res,next) =>{
 
   try {
     [result] = await conn.query(query);
-    await conn.commit();
+    
   } catch (e) {
     await conn.rollback();
     return;
