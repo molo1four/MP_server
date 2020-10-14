@@ -9,7 +9,9 @@ const {
   getMovies_ny,
   getLiked,
   searchMovie,
+  likesReset,
 } = require("../controllers/movies");
+const { route } = require("./users");
 
 const router = express.Router();
 
@@ -20,4 +22,5 @@ router.route("/getMovies_ny").get(auth, getMovies_ny);
 router.route("/getRecom").get(auth, getRecom);
 router.route("/getRecom_AR").get(auth, getRecom_AR);
 router.route("/searchMovies").get(auth, searchMovie)
+router.route("/likesReset").delete(auth, likesReset);
 module.exports = router;
