@@ -139,8 +139,8 @@ exports.withdrawal = async(req,res,next) =>{
   query = `delete from MP_user where id = ${user_id}`
 
   try {
-    [rows] = await connection.query(query);
-    console.log(rows);
+    [result] = await connection.query(query);
+    
   } catch (e) {
     console.log(e);
     return;
