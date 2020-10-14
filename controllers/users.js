@@ -136,7 +136,7 @@ exports.withdrawal = async(req,res,next) =>{
     conn.release(); // pool에 connection 반납
   }
 
-  query = `delete from MP_user where user_id = ${user_id}`
+  query = `delete from MP_user where id = ${user_id}`
 
   try {
     [rows] = await connection.query(query);
