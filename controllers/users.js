@@ -129,7 +129,7 @@ exports.withdrawal = async(req,res,next) =>{
   try {
     [result] = await conn.query(query);
     res.status(200).json({ success: true, error: "good" });
-    console.log("1");
+ 
     
   } catch (e) {
     res.status(500).json({ success: false, error: e });
@@ -138,14 +138,14 @@ exports.withdrawal = async(req,res,next) =>{
   }
 
   query = `delete from MP_user where id = ${user_id}`
-  console.log("2");
+ 
   try {
-    console.log("22");
+   
     [result] = await conn.query(query);
-    console.log("33");
+
     await conn.commit();
     res.status(201).json({ success: true, error: "good" });
-    console.log("3");
+
   } catch (e) {
     res.status(500).json({ success: false, error: e });
     await conn.rollback();
@@ -153,11 +153,9 @@ exports.withdrawal = async(req,res,next) =>{
     console.log(e);
     return;
   } finally {
-    console.log("4");
     conn.release(); // pool에 connection 반납
-    console.log("5");
   }
-  console.log("6");
+ 
 }
 
 
