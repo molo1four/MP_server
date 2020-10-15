@@ -248,14 +248,17 @@ exports.likesDelete = async(req,res,next) =>{
   let user_id = req.user.id;
   let movie_id = req.body.movie_id;
 
-  let query = `delete from MP_uesr_likes where user_id = ${user_id} and movie_id = ${movie_id}`
 
-  try {
-    [result] = await connection.query(query);
-    res.status(200).json({ success: true, result });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ success: false, error: e });
-    return;
+  for (let i = 0; i < movie_id.length; i++) {
+    let query = `delete from MP_uesr_likes where user_id = ${user_id} and movie_id = ${movie_id[i].movie_id}`
+    console.log(query);
+    try {
+      [rows] = await connection.query(query);
+    } catch (e) {
+      res.status(500).json({ success: false, error: e });
+      return;
+    }
   }
+
+  res.status(200).json({ success: true, rows });
 }
