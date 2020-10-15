@@ -241,16 +241,14 @@ exports.likesReset = async (req,res,next) =>{
 
 
 // @desc    좋아요 취소
-// @route   DELETE /api/v1/movies/likesDelete
+// @route   POST /api/v1/movies/likesDelete
 // @request ""
 // @response success, result
 exports.likesDelete = async(req,res,next) =>{
   let user_id = req.user.id;
   let movie_id = req.body.movie_id;
-
-
   for (let i = 0; i < movie_id.length; i++) {
-    let query = `delete from MP_user_likes where user_id = ${user_id} and movie_id = ${movie_id[i].movie_id};`
+    let query = `delete from MP_user_likes where user_id = ${user_id} and movie_id = ${movie_id[i].movie_id};`;
     console.log(query);
     try {
       [rows] = await connection.query(query);
@@ -261,4 +259,5 @@ exports.likesDelete = async(req,res,next) =>{
   }
 
   res.status(200).json({ success: true, rows });
+ 
 }
