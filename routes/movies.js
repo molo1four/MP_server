@@ -23,5 +23,5 @@ router.route("/getRecom").get(auth, getRecom);
 router.route("/getRecom_AR").get(auth, getRecom_AR);
 router.route("/searchMovies").get(auth, searchMovie)
 router.route("/likesReset").delete(auth, likesReset);
-router.route("/likesDelete").delete(auth, likesDelete);
+router.route("/likesDelete").post(auth, likesDelete);
 module.exports = router;
