@@ -1,4 +1,3 @@
-const { off, query } = require("../db/mysql_connection");
 // db 연결
 const connection = require("../db/mysql_connection");
 
@@ -222,7 +221,10 @@ exports.searchMovie = async (req, res, next) => {
   }
 };
 
-
+// @desc    좋아요 목록 초기화
+// @route   DELETE /api/v1/movies/likesReset
+// @request ""
+// @response success, cnt, rows[movie_id, title, release_date, poster_path,
 exports.likesReset = async (req,res,next) =>{
   let user_id = req.user.id;
 
@@ -234,5 +236,26 @@ exports.likesReset = async (req,res,next) =>{
       res.status(200).json({ success: true, result: result });
   } catch (e) {
     res.status(500).json({ success: false, error: e });
+  }
+}
+
+
+// @desc    좋아요 취소
+// @route   DELETE /api/v1/movies/likesDelete
+// @request ""
+// @response success, result
+exports.likesDelete = async(req,res,next) =>{
+  let user_id = req.user.id;
+  let movie_id = req.body.movie_id;
+
+  let query = `delete from MP_uesr_likes where user_id = ${user_id} and movie_id = ${movie_id}`
+
+  try {
+    [result] = await connection.query(query);
+    res.status(200).json({ success: true, result });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ success: false, error: e });
+    return;
   }
 }

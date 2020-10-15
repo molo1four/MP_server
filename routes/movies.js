@@ -10,6 +10,7 @@ const {
   getLiked,
   searchMovie,
   likesReset,
+  likesDelete,
 } = require("../controllers/movies");
 
 const router = express.Router();
@@ -22,4 +23,5 @@ router.route("/getRecom").get(auth, getRecom);
 router.route("/getRecom_AR").get(auth, getRecom_AR);
 router.route("/searchMovies").get(auth, searchMovie)
 router.route("/likesReset").delete(auth, likesReset);
+router.route("/likesDelete").delete(auth, likesDelete);
 module.exports = router;
