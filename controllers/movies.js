@@ -252,6 +252,7 @@ exports.likesDelete = async(req,res,next) =>{
     console.log(query);
     try {
       [rows] = await connection.query(query);
+      console.log(rows);
     } catch (e) {
       res.status(500).json({ success: false, error: e });
       return;
